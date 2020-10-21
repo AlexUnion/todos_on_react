@@ -6,21 +6,18 @@ import Header from './modules/header/header.module';
 import TodoElement from './modules/content/content.module';
 import Footer from "./modules/footer/footer.module";
 
+const STORAGE_KEY = 'todo_storage';
+
 class App extends Component{
 
   state = {
-    todo: [
-      {
-        text: 'Do homework',
-        isDone: false,
-        id: uuidv4(),
-      },
-      {
-        text: 'Task 2',
-        isDone: true,
-        id: uuidv4(),
-      },
-    ]
+    todo: []
+  }
+
+  constructor() {
+    super();
+
+    this.state.todo = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
   }
 
   render() {
@@ -45,23 +42,30 @@ class App extends Component{
   }
 
   handleDeleteAll = () => {
+    localStorage.removeItem(STORAGE_KEY);
     this.setState({
       todo: [],
-    })
+    });
   }
 
-  addTodo = (todo) => {
-    const { text } = todo;
-    this.setState((state) => ({
-      todo: [
-          ...state.todo,
-        {
-          text,
-          isDone: false,
-          id: uuidv4(),
-        }
-        ]
-    }));
+  addTodo = ({ text }) => {
+    this.setState(({ todo }) => {
+
+      const arr = [
+          ...todo,
+          {
+            text,
+            isDone: false,
+            id: uuidv4(),
+          }
+      ];
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+
+      return {
+        todo: arr
+      }
+    });
   }
 }
 

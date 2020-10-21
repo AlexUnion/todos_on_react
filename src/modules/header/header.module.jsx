@@ -31,6 +31,9 @@ class HeaderModule extends Component{
 
         const { addTodo } = this.props;
         const { inputLabel } = this.state;
+
+        if (!inputLabel || !inputLabel.trim()) return;
+
         addTodo({
             text: inputLabel,
         });

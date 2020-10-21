@@ -31,7 +31,7 @@ class App extends Component{
           <div className={'content'}>
             <ul>
               {todo.map(({text, id}) => (
-                  <TodoElement key={id} innerText={text}/>
+                  <TodoElement key={id} innerText={text} onDelete={(e) => this.onDelete(e, id)}/>
                   )
               )}
             </ul>
@@ -39,6 +39,17 @@ class App extends Component{
           <Footer quantity={length}/>
         </div>
     );
+  }
+
+  onDelete = (event, deletedId) => {
+    const { todo } = this.state;
+    const filtered = todo.filter(({id}) => id !== deletedId);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+
+    this.setState({
+      todo: filtered
+    });
   }
 
   handleDeleteAll = () => {
